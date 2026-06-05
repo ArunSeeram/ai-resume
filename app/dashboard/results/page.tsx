@@ -1,12 +1,20 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { ArrowLeft, Download, Share2, TrendingUp, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  Download,
+  Share2,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle2,
+  Loader2,
+} from 'lucide-react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-
 
 interface AnalysisResult {
   matchScore: number
@@ -30,44 +38,26 @@ function getSeverityColor(severity: string) {
 }
 
 export default function ResultsPage() {
-  const searchParams = useSearchParams()
-  const analysisId = searchParams.get('analysisId')
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const loadAnalysis = async () => {
-      try {
-        // First try to get from sessionStorage (immediately after analysis)
-        const sessionData = sessionStorage.getItem('analysisData')
-        if (sessionData) {
-          setAnalysis(JSON.parse(sessionData))
-          setLoading(false)
-          return
-        }
+    try {
+      const sessionData = sessionStorage.getItem('analysisData')
 
-        // If no session data, try to fetch from backend
-        if (!analysisId) {
-          setError('No analysis found')
-          setLoading(false)
-          return
-        }
-
-        const response = await fetch(`https://ai-resume-rmvr.onrender.com/api/analyze/${analysisId}`)
-        if (!response.ok) throw new Error('Failed to fetch analysis')
-        const data = await response.json()
-        setAnalysis(data)
-      } catch (err) {
-        setError('Failed to load analysis results. Please try analyzing again.')
-        console.error(err)
-      } finally {
-        setLoading(false)
+      if (sessionData) {
+        setAnalysis(JSON.parse(sessionData))
+      } else {
+        setError('No analysis found')
       }
+    } catch (err) {
+      console.error(err)
+      setError('Failed to load analysis')
+    } finally {
+      setLoading(false)
     }
-
-    loadAnalysis()
-  }, [analysisId])
+  }, [])
 
   if (loading) {
     return (
@@ -75,9 +65,33 @@ export default function ResultsPage() {
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <Loader2 className="h-12 w-12 text-primary animate-spin mx-auto mb-4" />
-            <p className="text-foreground/60">Analyzing your resume...</p>
+            <p className="text-foreground/60">
+              Analyzing your resume...
+            </p>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  if (error || !analysis) {
+    return (
+      <div className="p-6 sm:p-8 max-w-7xl mx-auto">
+        <Link
+          href="/dashboard/analyze"
+          className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition mb-4"
+        >
+          <ArrowLeft size={18} />
+          <span className="text-sm font-medium">
+            Back to analyze
+          </span>
+        </Link>
+
+        <Card className="p-8 bg-red-500/10 border border-red-500/30">
+          <p className="text-red-600 dark:text-red-400">
+            {error}
+          </p>
+        </Card>
       </div>
     )
   }

@@ -7,9 +7,6 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-console.log(
-  sessionStorage.getItem('analysisData')
-)
 
 interface AnalysisResult {
   matchScore: number

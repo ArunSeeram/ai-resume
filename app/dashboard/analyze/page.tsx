@@ -41,8 +41,7 @@ export default function AnalyzePage() {
       setUploadedFile(e.target.files[0])
     }
   }
-
-  const handleAnalyze = async () => {
+const handleAnalyze = async () => {
   if (!uploadedFile || !jobDescription.trim()) {
     setError('Please upload a resume and enter a job description')
     return
@@ -52,37 +51,31 @@ export default function AnalyzePage() {
   setError('')
 
   try {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL
+
     // Upload Resume
     const formData = new FormData()
     formData.append('resume', uploadedFile)
 
     const uploadResponse = await axios.post(
-  'https://ai-resume-rmvr.onrender.com/api/resume/upload',
-  formData,
-  {
-    headers: {
-      Authorization: 'Bearer demo-token',
-    },
-  }
-)
+      `${API_URL}/resume/upload`,
+      formData
+    )
 
     const resumeText = uploadResponse.data.text
 
     // Analyze Resume
     const analyzeResponse = await axios.post(
-  'https://ai-resume-rmvr.onrender.com/api/resume/analyze',
-  {
-    resumeText,
-    jobDescription,
-  },
-  {
-    headers: {
-      Authorization: 'Bearer demo-token',
-    },
-  }
-)
+      `${API_URL}/resume/analyze`,
+      {
+        resumeText,
+        jobDescription,
+      }
+    )
 
     const data = analyzeResponse.data
+
+    console.log('Analysis Data:', data)
 
     sessionStorage.setItem(
       'analysisData',
@@ -91,14 +84,14 @@ export default function AnalyzePage() {
 
     router.push('/dashboard/results')
   } catch (err: any) {
-  console.error(err)
+    console.error(err)
 
-  setError(
-    err?.response?.data?.message ||
-    err?.message ||
-    'Analysis failed'
-  )
-} finally {
+    setError(
+      err?.response?.data?.message ||
+      err?.message ||
+      'Analysis failed'
+    )
+  } finally {
     setIsAnalyzing(false)
   }
 }

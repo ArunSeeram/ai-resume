@@ -17,7 +17,6 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 
-localStorage.getItem('token')
 
 interface AnalysisResult {
   matchScore: number

@@ -57,7 +57,7 @@ const handleAnalyze = async () => {
     const formData = new FormData()
     formData.append('resume', uploadedFile)
 
-   const token = localStorage.getItem('token')
+  
 
 const uploadResponse = await axios.post(
   `${API_URL}/resume/upload`,

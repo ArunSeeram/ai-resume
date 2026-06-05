@@ -76,27 +76,7 @@ export default function ResultsPage() {
     )
   }
 
-  if (error || !analysis) {
-    return (
-      <div className="p-6 sm:p-8 max-w-7xl mx-auto">
-        <Link
-          href="/dashboard/analyze"
-          className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition mb-4"
-        >
-          <ArrowLeft size={18} />
-          <span className="text-sm font-medium">
-            Back to analyze
-          </span>
-        </Link>
 
-        <Card className="p-8 bg-red-500/10 border border-red-500/30">
-          <p className="text-red-600 dark:text-red-400">
-            {error}
-          </p>
-        </Card>
-      </div>
-    )
-  }
 
   if (error || !analysis) {
     return (

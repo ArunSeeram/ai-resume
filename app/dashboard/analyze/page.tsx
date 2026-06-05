@@ -52,6 +52,7 @@ const handleAnalyze = async () => {
 
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL
+    const token = localStorage.getItem('token')
 
     // Upload Resume
     const formData = new FormData()

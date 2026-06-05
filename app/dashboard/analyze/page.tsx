@@ -57,22 +57,33 @@ const handleAnalyze = async () => {
     const formData = new FormData()
     formData.append('resume', uploadedFile)
 
-    const uploadResponse = await axios.post(
-      `${API_URL}/resume/upload`,
-      formData
-    )
+   const token = localStorage.getItem('token')
+
+const uploadResponse = await axios.post(
+  `${API_URL}/resume/upload`,
+  formData,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+)
 
     const resumeText = uploadResponse.data.text
 
     // Analyze Resume
     const analyzeResponse = await axios.post(
-      `${API_URL}/resume/analyze`,
-      {
-        resumeText,
-        jobDescription,
-      }
-    )
-
+  `${API_URL}/resume/analyze`,
+  {
+    resumeText,
+    jobDescription,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+)
     const data = analyzeResponse.data
 
     console.log('Analysis Data:', data)

@@ -41,6 +41,8 @@ export default function AnalyzePage() {
       setUploadedFile(e.target.files[0])
     }
   }
+
+
 const handleAnalyze = async () => {
   if (!uploadedFile || !jobDescription.trim()) {
     setError('Please upload a resume and enter a job description')
@@ -51,21 +53,21 @@ const handleAnalyze = async () => {
   setError('')
 
   try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL
-    const token = localStorage.getItem('token')
+    const API_URL = 'https://ai-resume-rmvr.onrender.com/api'
+    
 
     // Upload Resume
     const formData = new FormData()
     formData.append('resume', uploadedFile)
 
-  
+const token = localStorage.getItem('token')
 
 const uploadResponse = await axios.post(
   `${API_URL}/resume/upload`,
   formData,
   {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: 'Bearer demo-token',
     },
   }
 )
@@ -81,7 +83,7 @@ const uploadResponse = await axios.post(
   },
   {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: 'Bearer demo-token',
     },
   }
 )

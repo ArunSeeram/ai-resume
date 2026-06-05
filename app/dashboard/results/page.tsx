@@ -44,6 +44,11 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+
+
+
+  
+
   useEffect(() => {
     try {
       const sessionData = sessionStorage.getItem('analysisData')
